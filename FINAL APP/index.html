@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" href="css/style.css" rel="stylesheet">
+    <title></title>
+</head>
+
+<body>
+    <nav><i class="material-icons" id="backBtn" style="display:none;">arrow_back</i></nav>
+
+    <!--    див с регистрацией-->
+    <div id="signUp">
+        <center>
+            <h2>Регистрация</h2>
+        </center>
+        <span>Логин</span><input type="text" id="login_signup">
+        <span>Номер</span><input type="text" id="number_signup">
+        <span>Пароль</span><input type="password" id="password_signup">
+        <select id="status">
+              <option value="">Выберите статус</option>
+              <option value="0">Ищу работу</option>
+              <option value="1">Работодатель</option>
+        </select>
+        <center>
+            <button class="btn s6" id="signup_btn">Зарегаться</button>
+            <button class="btn s6" id="signInBtn">У меня уже есть аккаунт</button>
+        </center>
+    </div>
+
+
+    <!--   див с авторизацией-->
+    <div id="signIn">
+        <center>
+            <h2>Авторизация</h2>
+        </center>
+        <span>Логин</span><input type="text" id="login_signin">
+        <span>Пароль</span><input type="password" id="password_signin">
+        <button class="btn" id="signin_btn">Войти</button>
+    </div>
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('select').formSelect();
+        });
+
+        //проверка на наличие аккаунта
+        $(document).ready(function() {
+            if (localStorage.hasOwnProperty("user_id")) {
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/userPage',
+                    data: {
+                        user_id: localStorage.user_id,
+                    },
+                    success: function() {
+                        location.replace("userPage.html")
+                    }
+                });
+            } else {
+                $("#signUp").show();
+            }
+        })
+        //конец проверки
+
+
+        //регистрация
+        $("#signup_btn").on("click", function() {
+            if ($("#login_signup").val() == "" || $("#number_signup").val() == "" || $("#password_signup").val() == "" || $('#status').val() == "") {
+                M.toast({
+                    html: 'Заполните все поля!'
+                })
+            } else {
+                    $.ajax({
+                        url: 'http://127.0.0.1:8000/signup',
+                        data: {
+                            "login_signup": $("#login_signup").val(),
+                            "number_signup": $("#number_signup").val(),
+                            "password_signup": $("#password_signup").val(),
+                            "status": $("#status").val()
+                        },
+                        success: function(data) {
+                            if(data.length == 0) {
+                                M.toast({
+                                    html: 'Заполните все поля!'
+                                })
+                            }
+                            else{
+                                localStorage.setItem("user_id", data.id)
+                                location.replace("userPage.html");
+                            }
+                        }
+                    });
+                
+            }
+        });
+        //конец регистрации
+
+
+
+        //авторизация
+        $("#signin_btn").on("click", function() {
+            if ($("#login_signin").val() == "" || $("#password_signin").val() == "") {
+                M.toast({
+                    html: 'Заполните все поля!'
+                })
+            } else {
+                $(document).ready(function() {
+                    $.ajax({
+                        url: 'http://127.0.0.1:8000/signin',
+                        data: {
+                            "login_signin": $("#login_signin").val(),
+                            "password_signin": $("#password_signin").val()
+                        },
+                        success: function(data) {
+                            console.log(data)
+                            if (data.length == 0) {
+                                M.toast({
+                                    html: 'Вы ввели неправильный пароль или имя пользователя'
+                                })
+                            } else {
+                                localStorage.setItem("user_id", data[0].id);
+                                location.replace("userPage.html");
+                            }
+                        }
+                    });
+                })
+            }
+        });
+        //конец авторизации
+
+
+
+
+
+
+        //переходы
+        $("#signInBtn").on("click", function() {
+            $("#signUp").hide();
+            $("#signIn").show();
+            $("#backBtn").show();
+        });
+
+        $("#backBtn").on("click", function() {
+            $("#signIn").hide();
+            $("#signUp").show();
+            $("#backBtn").hide();
+
+        });
+        //конец переходов
+
+    </script>
+</body>
+
+</html>

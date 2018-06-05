@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" href="css/style.css" rel="stylesheet">
+    <title></title>
+</head>
+
+<body>
+    <nav><i class="material-icons" id="backBtn">arrow_back</i></nav>
+    <div class="container">
+        <center>
+            <h6>Здесь вы можете подать объявление о работе.</h6>
+        </center>
+        <span>Время работы</span><input type="text" id="time">
+        <span>Описание работы</span><input type="text" id="description">
+        <span>Номер телефона</span><input type="text" id="number">
+        <button id="addAd">Подать объявление</button>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+    <script>
+        $("#backBtn").on("click", function() {
+            location.replace("userPage.html");
+
+        });
+
+
+        $("#addAd").on("click", function() {
+            if ($("#time").val() == "" || $("#description").val() == "" || $("#number").val() == "") {
+                M.toast({
+                    html: 'Заполните все поля!'
+                })
+            } else {
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/addAdvert',
+                    data: {
+                        "timm": $("#time").val(),
+                        "description": $("#description").val(),
+                        "number": $("#number").val(),
+                        "user_id": localStorage.user_id
+                    },
+                    success: function() {
+                        M.toast({
+                            html: 'Объявление добавлено'
+                        })
+                    }
+                });
+
+            }
+        });
+
+    </script>
+</body>
+
+</html>

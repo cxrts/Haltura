@@ -1,0 +1,14 @@
+body{
+    margin:0;
+    padding:0;
+}
+#signUp{
+    display:none;
+    height:100%;
+    width:100%;
+}
+#signIn{
+    display:none;
+    height:100%;
+    width:100%;
+}

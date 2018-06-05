@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" href="css/style.css" rel="stylesheet">
+    <title></title>
+</head>
+
+<body>   
+    
+    <div class="container">
+       <div class="row">
+          <center><h5>Личный кабинет</h5></center>
+           <div class="col s4"><i class="large material-icons">account_circle</i></div>
+           <div class="col s8"><span>Имя пользователя: </span><b><span id="nickname" ></span></b></div>
+           <div class="col s8"><span>Номер: </span><b><span id="number" ></span></b></div>
+           <div class="col s8"><span>Ваш статус: </span><b><span id="status" ></span></b></div>
+       </div>
+       <div class="row container">
+           <button id="exit_btn" class=" s6">Выйти с аккаунта</button>
+             <button id="search_btn" class="s6" style="display:none;">Найти работу</button>
+             <button id="add_btn" class=" s6" style="display:none;">Подать объявление</button>
+       </div>
+        
+    </div>
+   
+     
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+    <script>
+        
+        // Проверка на наличие user_id, данные об аккаунте
+         $(document).ready(function() {
+            if (localStorage.hasOwnProperty("user_id")) {
+                $.ajax({
+                    url: 'http://127.0.0.1:8000/userPage',
+                    data: {
+                        user_id: localStorage.user_id,
+                    },
+                    success: function(data) {
+                        $('#nickname').html(data[0]["name"]);
+                        $('#number').html(data[0]["number"]);
+                        
+                        if(data[0]["status"]==1){
+                             $('#status').html("Работодатель");
+                            $("#add_btn").show();
+                        }
+                        else{
+                            $('#status').html("Ищу работу");
+                            $("#search_btn").show();
+                        }
+                    }
+                });
+            } else {
+                $("#signUp").show();
+            }
+        })
+        
+        
+        
+        
+        // Выйти с аккаунта
+        $("#exit_btn").on("click", function() {
+            localStorage.clear();
+            location.replace("index.html");
+            
+        });
+        
+        // Переход в объявления
+         $("#search_btn").on("click", function() {
+            location.replace("ads.html");
+            
+        });
+        
+        $("#add_btn").on("click", function() {
+            location.replace("addads.html");
+            
+        });
+    </script>
+</body>
+
+</html>
