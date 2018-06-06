@@ -65,3 +65,18 @@ Route::get('/getAdCreater',function(Request $req){
     
     return App\User::where("id", $req->user_id)->get();
 });
+
+Route::get('/getMyAds', function(Request $req){
+    header("Access-Control-Allow-Origin: *");
+    
+    return App\Advert::where("user_id", $req->user_id)->where("status", 0)->get();
+});
+
+Route::get('/delMyAds', function(Request $req){
+    header("Access-Control-Allow-Origin: *");
+    
+    App\Advert::where("id", $req->post_id)->update(
+        ["status"=>1]
+    );
+
+});
