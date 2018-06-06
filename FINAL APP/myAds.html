@@ -22,7 +22,10 @@
         var main = document.querySelector(".main");
 
         $.ajax({
-            url: 'http://127.0.0.1:8000/getAll',
+            url: 'http://127.0.0.1:8000/getMyAds',
+            data: {
+                user_id: localStorage.user_id,
+            },
             success: function(db) {
                 for (var i = 0; i < db.length; i++) {
                     var divRow = document.createElement("div");
@@ -57,6 +60,29 @@
                     var carda = document.createElement("a");
                     cardAction.appendChild(carda);
                     carda.innerHTML = db[i]["number"];
+
+                    var btn = document.createElement("button");
+                    cardAction.appendChild(btn);
+                    btn.innerHTML = "Отозвать объявление";
+                    btn.classList.add("btn-small");
+                    btn.post_id = db[i].id
+                    btn.onclick = function() {
+                        console.log(this.post_id);
+                        M.toast({
+                            html: 'Объявление отправлено в архив'
+                        })
+                        this.classList.add("disabled");
+                        
+                        $.ajax({
+                            url: 'http://127.0.0.1:8000/delMyAds',
+                            data: {
+                                post_id: this.post_id,
+                            },
+                            success: function() {
+                                
+                            }
+                        });
+                    }
                 }
             }
         });

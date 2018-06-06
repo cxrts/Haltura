@@ -24,6 +24,7 @@
            <button id="exit_btn" class=" s6">Выйти с аккаунта</button>
              <button id="search_btn" class="s6" style="display:none;">Найти работу</button>
              <button id="add_btn" class=" s6" style="display:none;">Подать объявление</button>
+             <button id="myAds_btn" class=" s6" style="display:none;">Мои объявления</button>
        </div>
         
     </div>
@@ -50,6 +51,7 @@
                         if(data[0]["status"]==1){
                              $('#status').html("Работодатель");
                             $("#add_btn").show();
+                            $("#myAds_btn").show();
                         }
                         else{
                             $('#status').html("Ищу работу");
@@ -75,6 +77,11 @@
         // Переход в объявления
          $("#search_btn").on("click", function() {
             location.replace("ads.html");
+            
+        });
+        
+        $("#myAds_btn").on("click", function() {
+            location.replace("myAds.html");
             
         });
         

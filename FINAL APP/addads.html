@@ -37,7 +37,7 @@
             if ($("#time").val() == "" || $("#description").val() == "" || $("#number").val() == "") {
                 M.toast({
                     html: 'Заполните все поля!'
-                })
+                });
             } else {
                 $.ajax({
                     url: 'http://127.0.0.1:8000/addAdvert',
